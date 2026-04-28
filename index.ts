@@ -13,6 +13,11 @@ import { emptyPluginConfigSchema } from 'openclaw/plugin-sdk';
 import { feishuPlugin } from './src/channel/plugin';
 import { LarkClient } from './src/core/lark-client';
 import { registerOapiTools } from './src/tools/oapi/index';
+import {
+  registerKnowledgeHooks,
+  createKnowledgeAddTool,
+  createKnowledgeQueryTool,
+} from '@partme.ai/openclaw-knowledge';
 import { registerFeishuMcpDocTools } from './src/tools/mcp/doc/index';
 import { registerFeishuOAuthTool } from './src/tools/oauth';
 import { registerFeishuOAuthBatchAuthTool } from './src/tools/oauth-batch-auth';
@@ -114,6 +119,11 @@ const plugin = {
 
     // Register OAPI tools (calendar, task - using Feishu Open API directly)
     registerOapiTools(api);
+
+    // Register knowledge RAG hooks and tools (add + query)
+    registerKnowledgeHooks(api, 'channels.lark.knowledge');
+    api.registerTool(createKnowledgeAddTool);
+    api.registerTool(createKnowledgeQueryTool);
 
     // Register MCP doc tools (using Model Context Protocol)
     registerFeishuMcpDocTools(api);
